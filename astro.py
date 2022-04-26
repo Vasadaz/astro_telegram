@@ -3,6 +3,7 @@ import urllib.parse
 from pathlib import Path
 
 import requests
+from dotenv import load_dotenv
 
 
 def download_img(url_img: str, save_path: str):
@@ -34,4 +35,8 @@ def parser_img_file(url: str) -> tuple:
 
 
 if __name__ == "__main__":
+    dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+    if os.path.exists(dotenv_path):
+        load_dotenv(dotenv_path)
+
     fetch_spacex_last_launch(156)
