@@ -13,6 +13,14 @@ def download_img(url_img: str, save_path: str, img_name: str):
         file.write(response.content)
 
 
+def fetch_spacex_last_launch(id_launch: int):
+    response = requests.get("https://api.spacexdata.com/v4/launches/")
+    response.raise_for_status()
+
+    for spacex_link_img in response.json()[id_launch]["links"]["flickr"]["original"]:
+        name_image = spacex_link_img.split("/")[-1]
+        download_img(spacex_link_img, "images", name_image)
+
+
 if __name__ == "__main__":
-    download_img("https://drasler.ru/wp-content/uploads/2019/05/%D0%9A%D0%B0%D1%80%D1%82%D0%B8%D0%BD%D0%BA%D0%B8-%D1%81-%D1%85%D0%BE%D1%80%D0%BE%D1%88%D0%B8%D0%BC-%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE%D0%BC-%D0%BD%D0%B0-%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B8%D0%B9-%D1%81%D1%82%D0%BE%D0%BB-%D0%BF%D0%BE%D0%B4%D0%B1%D0%BE%D1%80%D0%BA%D0%B0-22.jpg",
-                 "images", "img.jpeg")
+    fetch_spacex_last_launch(156)
