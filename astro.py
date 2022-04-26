@@ -21,7 +21,7 @@ def fetch_spacex_last_launch(id_launch: int):
     response.raise_for_status()
 
     for spacex_link_img in response.json()[id_launch]["links"]["flickr"]["original"]:
-        download_img(spacex_link_img, "images")
+        download_img(spacex_link_img, "images_spacex")
 
 
 def parser_img_file(url: str) -> tuple:
