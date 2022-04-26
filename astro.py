@@ -34,9 +34,23 @@ def parser_img_file(url: str) -> tuple:
     return img_file_tuple
 
 
+def nasa_apod_img(count_img: int):
+    nasa_token = os.environ["NASA_TOKEN"]
+    payload = {"api_key": nasa_token, "count": count_img}
+    url = "https://api.nasa.gov/planetary/apod"
+
+    response = requests.get(url, params=payload)
+    response.raise_for_status()
+
+    for nasa_day in response.json():
+        nasa_link_img = nasa_day.get("hdurl")
+        download_img(nasa_link_img, "images_nasa")
+
+
 if __name__ == "__main__":
     dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
     if os.path.exists(dotenv_path):
         load_dotenv(dotenv_path)
 
     fetch_spacex_last_launch(156)
+    nasa_apod_img(30)
