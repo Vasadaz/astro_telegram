@@ -49,7 +49,7 @@ def nasa_apod_img(count_img: int):
             download_img(nasa_link_img, "images_nasa_apod")
 
 
-def nasa_epic_img():
+def nasa_epic_img(count_img: int):
     nasa_token = os.environ["NASA_TOKEN"]
     payload = {"api_key": nasa_token}
     url = "https://api.nasa.gov/EPIC/api/natural"
@@ -57,13 +57,16 @@ def nasa_epic_img():
     response = requests.get(url, params=payload)
     response.raise_for_status()
 
-    nasa_epic_last_foto_info = response.json()[-1]
-    nasa_epic_last_foto_date = nasa_epic_last_foto_info["date"][:10].replace("-", "/")
-    nasa_epic_last_foto_name = nasa_epic_last_foto_info["image"]
-    nasa_epic_last_foto_url = f"https://api.nasa.gov/EPIC/archive/natural/" \
-                              f"{nasa_epic_last_foto_date}/png/{nasa_epic_last_foto_name}.png?"
+    epic_foto_info_list = response.json()
 
-    download_img(nasa_epic_last_foto_url + urllib.parse.urlencode(payload), "images_nasa_epic")
+    for number_foto in range(-count_img, 0):
+        epic_last_foto_info = epic_foto_info_list[number_foto]
+        epic_last_foto_date = epic_last_foto_info["date"][:10].replace("-", "/")
+        epic_last_foto_name = epic_last_foto_info["image"]
+        epic_last_foto_url = f"https://api.nasa.gov/EPIC/archive/natural/" \
+                                  f"{epic_last_foto_date}/png/{epic_last_foto_name}.png?"
+
+        download_img(epic_last_foto_url + urllib.parse.urlencode(payload), "images_nasa_epic")
 
 
 if __name__ == "__main__":
@@ -73,4 +76,4 @@ if __name__ == "__main__":
 
     fetch_spacex_last_launch(156)
     nasa_apod_img(30)
-    nasa_epic_img()
+    nasa_epic_img(5)
