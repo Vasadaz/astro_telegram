@@ -44,7 +44,9 @@ def nasa_apod_img(count_img: int):
 
     for nasa_day in response.json():
         nasa_link_img = nasa_day.get("hdurl")
-        download_img(nasa_link_img, "images_nasa")
+
+        if nasa_link_img is not None:
+            download_img(nasa_link_img, "images_nasa_apod")
 
 
 if __name__ == "__main__":
