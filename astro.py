@@ -1,4 +1,5 @@
 import os
+import time
 import urllib.parse
 from pathlib import Path
 
@@ -72,9 +73,21 @@ def nasa_epic_img(count_img: int):
 
 def send_img_telegram():
     telegram_token = os.environ["TELEGRAM_TOKEN"]
+    telegram_pause = os.getenv("TELEGRAM_PAUSE", default=86400)
     bot = telegram.Bot(telegram_token)
-    print(bot.get_me())
-    bot.send_message(text='First msg', chat_id="@astro_worl_dvmn")
+    chat_id = "@astro_worl_dvmn"
+
+    path_all_img = os.walk("images_nasa_apod")
+
+    while True:
+        for dir in path_all_img:
+            print(dir)
+            for file in dir[2]:
+                path_img = Path(dir[0], file)
+                print(path_img)
+                bot.send_photo(chat_id=chat_id, photo=open(path_img, 'rb'))
+                time.sleep(int(telegram_pause))
+
 
 if __name__ == "__main__":
     dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
