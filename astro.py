@@ -3,6 +3,7 @@ import urllib.parse
 from pathlib import Path
 
 import requests
+import telegram
 from dotenv import load_dotenv
 
 
@@ -64,10 +65,16 @@ def nasa_epic_img(count_img: int):
         epic_last_foto_date = epic_last_foto_info["date"][:10].replace("-", "/")
         epic_last_foto_name = epic_last_foto_info["image"]
         epic_last_foto_url = f"https://api.nasa.gov/EPIC/archive/natural/" \
-                                  f"{epic_last_foto_date}/png/{epic_last_foto_name}.png?"
+                             f"{epic_last_foto_date}/png/{epic_last_foto_name}.png?"
 
         download_img(epic_last_foto_url + urllib.parse.urlencode(payload), "images_nasa_epic")
 
+
+def send_img_telegram():
+    telegram_token = os.environ["TELEGRAM_TOKEN"]
+    bot = telegram.Bot(telegram_token)
+    print(bot.get_me())
+    bot.send_message(text='First msg', chat_id="@astro_worl_dvmn")
 
 if __name__ == "__main__":
     dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
@@ -77,3 +84,4 @@ if __name__ == "__main__":
     fetch_spacex_last_launch(156)
     nasa_apod_img(30)
     nasa_epic_img(5)
+    send_img_telegram()
