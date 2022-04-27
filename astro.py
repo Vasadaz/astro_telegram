@@ -49,6 +49,23 @@ def nasa_apod_img(count_img: int):
             download_img(nasa_link_img, "images_nasa_apod")
 
 
+def nasa_epic_img():
+    nasa_token = os.environ["NASA_TOKEN"]
+    payload = {"api_key": nasa_token}
+    url = "https://api.nasa.gov/EPIC/api/natural"
+
+    response = requests.get(url, params=payload)
+    response.raise_for_status()
+
+    nasa_epic_last_foto_info = response.json()[-1]
+    nasa_epic_last_foto_date = nasa_epic_last_foto_info["date"][:10].replace("-", "/")
+    nasa_epic_last_foto_name = nasa_epic_last_foto_info["image"]
+    nasa_epic_last_foto_url = f"https://api.nasa.gov/EPIC/archive/natural/" \
+                              f"{nasa_epic_last_foto_date}/png/{nasa_epic_last_foto_name}.png?"
+
+    download_img(nasa_epic_last_foto_url + urllib.parse.urlencode(payload), "images_nasa_epic")
+
+
 if __name__ == "__main__":
     dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
     if os.path.exists(dotenv_path):
@@ -56,3 +73,4 @@ if __name__ == "__main__":
 
     fetch_spacex_last_launch(156)
     nasa_apod_img(30)
+    nasa_epic_img()
