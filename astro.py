@@ -81,15 +81,12 @@ def send_img_telegram():
 
     while True:
         for dir in path_all_img:
+            print(dir)
             for file in dir[2]:
                 path_img = Path(dir[0], file)
-
-                try:
-                    bot.send_photo(chat_id=chat_id, photo=open(path_img, 'rb'))
-                    time.sleep(int(telegram_pause))
-
-                except telegram.error.BadRequest as error_text:
-                    print(error_text, path_img)
+                print(path_img)
+                bot.send_photo(chat_id=chat_id, photo=open(path_img, 'rb'))
+                time.sleep(int(telegram_pause))
 
 
 if __name__ == "__main__":
