@@ -19,12 +19,12 @@ def download_img(url_img: str, save_path: str):
         file.write(response.content)
 
 
-def fetch_spacex_last_launch(id_launch: int):
+def fetch_spacex_last_launch(id_launch: int, dir_for_img: str):
     response = requests.get("https://api.spacexdata.com/v4/launches/")
     response.raise_for_status()
 
     for spacex_link_img in response.json()[id_launch]["links"]["flickr"]["original"]:
-        download_img(spacex_link_img, "images_spacex")
+        download_img(spacex_link_img, dir_for_img)
 
 
 def parser_img_file(url: str) -> tuple:
@@ -36,7 +36,7 @@ def parser_img_file(url: str) -> tuple:
     return img_file_tuple
 
 
-def nasa_apod_img(count_img: int):
+def nasa_apod_img(count_img: int, dir_for_img: str):
     nasa_token = os.environ["NASA_TOKEN"]
     payload = {"api_key": nasa_token, "count": count_img}
     url = "https://api.nasa.gov/planetary/apod"
@@ -48,10 +48,10 @@ def nasa_apod_img(count_img: int):
         nasa_link_img = nasa_day.get("hdurl")
 
         if nasa_link_img is not None:
-            download_img(nasa_link_img, "images_nasa_apod")
+            download_img(nasa_link_img, dir_for_img)
 
 
-def nasa_epic_img(count_img: int):
+def nasa_epic_img(count_img: int, dir_for_img: str):
     nasa_token = os.environ["NASA_TOKEN"]
     payload = {"api_key": nasa_token}
     url = "https://api.nasa.gov/EPIC/api/natural"
@@ -68,28 +68,28 @@ def nasa_epic_img(count_img: int):
         epic_last_foto_url = f"https://api.nasa.gov/EPIC/archive/natural/" \
                              f"{epic_last_foto_date}/png/{epic_last_foto_name}.png?"
 
-        download_img(epic_last_foto_url + urllib.parse.urlencode(payload), "images_nasa_epic")
+        download_img(epic_last_foto_url + urllib.parse.urlencode(payload), dir_for_img)
 
 
-def send_img_telegram():
+def send_img_telegram(dirs_img_list: list):
     telegram_token = os.environ["TELEGRAM_TOKEN"]
     telegram_pause = os.getenv("TELEGRAM_PAUSE", default=86400)
     bot = telegram.Bot(telegram_token)
     chat_id = "@astro_worl_dvmn"
 
-    path_all_img = os.walk("images_nasa_apod")
-
     while True:
-        for dir in path_all_img:
-            for file in dir[2]:
-                path_img = Path(dir[0], file)
+        for name_dur in dirs_img_list:
+            path_all_img = os.walk(name_dur)
 
-                try:
-                    bot.send_photo(chat_id=chat_id, photo=open(path_img, 'rb'))
-                    time.sleep(int(telegram_pause))
+            for dir in path_all_img:
+                for file in dir[2]:
+                    path_img = Path(dir[0], file)
 
-                except telegram.error.BadRequest as error_text:
-                    print(error_text, path_img)
+                    try:
+                        bot.send_photo(chat_id=chat_id, photo=open(path_img, 'rb'))
+                        time.sleep(int(telegram_pause))
+                    except telegram.error.BadRequest as error_text:
+                        print(error_text, path_img)
 
 
 if __name__ == "__main__":
@@ -97,7 +97,9 @@ if __name__ == "__main__":
     if os.path.exists(dotenv_path):
         load_dotenv(dotenv_path)
 
-    fetch_spacex_last_launch(156)
-    nasa_apod_img(30)
-    nasa_epic_img(5)
-    send_img_telegram()
+    dirs_for_img_list = ["images_spacex", "images_nasa_apod", "images_nasa_epic"]
+
+    fetch_spacex_last_launch(156, dirs_for_img_list[0])
+    nasa_apod_img(30, dirs_for_img_list[1])
+    nasa_epic_img(5, dirs_for_img_list[2])
+    send_img_telegram(dirs_for_img_list)
