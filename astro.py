@@ -7,8 +7,8 @@ import spacex
 import telegram_poster
 
 
-COUNT_IMG_NASA_APOD = 10
-COUNT_IMG_NASA_EPIC = 10
+COUNT_IMG_NASA_APOD = 3
+COUNT_IMG_NASA_EPIC = 3
 DIR_IMG_NASA_APOD = "images_nasa_apod"
 DIR_IMG_NASA_EPIC = "images_nasa_epic"
 DIR_IMG_SPACEX = "images_spacex"
@@ -19,8 +19,8 @@ if __name__ == "__main__":
     dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
     if os.path.exists(dotenv_path):
         load_dotenv(dotenv_path)
-
-    spacex.douwnload_img_last_launch(156, DIR_IMG_SPACEX)
-    nasa.download_img_apod(COUNT_IMG_NASA_APOD, DIR_IMG_NASA_APOD)
-    nasa.download_img_epic(COUNT_IMG_NASA_EPIC, DIR_IMG_NASA_EPIC)
-    telegram_poster.send_img_telegram(DIRS_IMG)
+    while True:
+        spacex.douwnload_img_last_launch(156, DIR_IMG_SPACEX)
+        nasa.download_img_apod(COUNT_IMG_NASA_APOD, DIR_IMG_NASA_APOD)
+        nasa.download_img_epic(COUNT_IMG_NASA_EPIC, DIR_IMG_NASA_EPIC)
+        telegram_poster.send_img_telegram(DIRS_IMG)
