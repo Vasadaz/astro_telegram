@@ -16,7 +16,6 @@ def download_img(url_img: str, save_path: str):
         file.write(response.content)
 
 
-
 def parser_img_file(url: str) -> tuple:
     img_url_path = urllib.parse.urlsplit(url).path
     img_url_path_unquote = urllib.parse.unquote(img_url_path)
