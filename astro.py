@@ -7,8 +7,8 @@ import spacex
 import telegram_poster
 
 
-COUNT_IMG_NASA_APOD = 3
-COUNT_IMG_NASA_EPIC = 3
+COUNT_IMG_NASA_APOD = 30
+COUNT_IMG_NASA_EPIC = 5
 DIR_IMG_NASA_APOD = "images_nasa_apod"
 DIR_IMG_NASA_EPIC = "images_nasa_epic"
 DIR_IMG_SPACEX = "images_spacex"
