@@ -3,6 +3,9 @@ import requests
 from downloader import download_img
 
 
+DIR_IMG_SPACEX = "images_spacex"
+
+
 def download_img_last_launch(dir_for_img: str):
     response = requests.get("https://api.spacexdata.com/v4/launches/")
     response.raise_for_status()
@@ -16,3 +19,7 @@ def download_img_last_launch(dir_for_img: str):
                 download_img(link, dir_for_img)
 
             break
+
+
+if __name__ == "__main__":
+    download_img_last_launch(DIR_IMG_SPACEX)

@@ -3,6 +3,7 @@ import time
 from pathlib import Path
 
 import telegram
+from dotenv import load_dotenv
 
 
 def send_img_telegram(dirs_img_list: list):
@@ -26,3 +27,17 @@ def send_img_telegram(dirs_img_list: list):
 
                 os.remove(path_img)
         os.rmdir(name_dir)
+
+
+if __name__ == "__main__":
+    dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+    if os.path.exists(dotenv_path):
+        load_dotenv(dotenv_path)
+    names_dirs = os.listdir()
+    img_dirs_list = []
+
+    for name_dir in names_dirs:
+        if "images" in name_dir:
+            img_dirs_list.append(name_dir)
+
+    send_img_telegram(img_dirs_list)

@@ -2,8 +2,15 @@ import os
 import urllib.parse
 
 import requests
+from dotenv import load_dotenv
 
 from downloader import download_img
+
+
+COUNT_IMG_NASA_APOD = 30
+COUNT_IMG_NASA_EPIC = 5
+DIR_IMG_NASA_APOD = "images_nasa_apod"
+DIR_IMG_NASA_EPIC = "images_nasa_epic"
 
 
 def download_img_apod(count_img: int, dir_for_img: str):
@@ -39,3 +46,12 @@ def download_img_epic(count_img: int, dir_for_img: str):
                              f"{epic_last_foto_date}/png/{epic_last_foto_name}.png?"
 
         download_img(epic_last_foto_url + urllib.parse.urlencode(payload), dir_for_img)
+
+
+if __name__ == "__main__":
+    dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+    if os.path.exists(dotenv_path):
+        load_dotenv(dotenv_path)
+
+    download_img_apod(COUNT_IMG_NASA_APOD, DIR_IMG_NASA_APOD)
+    download_img_epic(COUNT_IMG_NASA_EPIC, DIR_IMG_NASA_EPIC)
