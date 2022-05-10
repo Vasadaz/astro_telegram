@@ -17,7 +17,7 @@ def download_img_apod(count_img: int, dir_for_img: str):
     for nasa_day in response.json():
         nasa_link_img = nasa_day.get("hdurl")
 
-        if nasa_link_img is not None:
+        if nasa_link_img:
             download_img(nasa_link_img, dir_for_img)
 
 
