@@ -14,7 +14,7 @@ def download_img_last_launch(dir_for_img: str):
     for launch in all_launches[::-1]:
         launch_img_links = launch["links"]["flickr"]["original"]
 
-        if len(launch_img_links) > 0:
+        if launch_img_links:
             for link in launch_img_links:
                 download_img(link, dir_for_img)
 
