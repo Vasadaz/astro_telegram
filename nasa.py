@@ -1,5 +1,6 @@
 import os
 import urllib.parse
+from datetime import datetime
 
 import requests
 from dotenv import load_dotenv
@@ -36,16 +37,16 @@ def download_img_epic(count_img: int, dir_for_img: str):
     response = requests.get(url, params=payload)
     response.raise_for_status()
 
-    epic_foto_info_list = response.json()
+    epic_img_info_list = response.json()
 
-    for number_foto in range(-count_img, 0):
-        epic_last_foto_info = epic_foto_info_list[number_foto]
-        epic_last_foto_date = epic_last_foto_info["date"][:10].replace("-", "/")
-        epic_last_foto_name = epic_last_foto_info["image"]
-        epic_last_foto_url = f"https://api.nasa.gov/EPIC/archive/natural/" \
-                             f"{epic_last_foto_date}/png/{epic_last_foto_name}.png?"
+    for epic_last_img_info in epic_img_info_list[-count_img:]:
+        epic_last_img_date_iso = datetime.fromisoformat(epic_last_img_info["date"])
+        epic_last_img_date = datetime.strftime(epic_last_img_date_iso, "%Y/%m/%d")
+        epic_last_img_name = epic_last_img_info["image"]
+        epic_last_img_url = f"https://api.nasa.gov/EPIC/archive/natural/" \
+                             f"{epic_last_img_date}/png/{epic_last_img_name}.png?"
 
-        download_img(epic_last_foto_url + urllib.parse.urlencode(payload), dir_for_img)
+        download_img(epic_last_img_url + urllib.parse.urlencode(payload), dir_for_img)
 
 
 if __name__ == "__main__":
