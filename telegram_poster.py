@@ -13,14 +13,13 @@ def send_img_telegram(dirs_img_list: list):
     bot = telegram.Bot(telegram_token)
 
     for name_dir in dirs_img_list:
-        path_all_img = os.walk(name_dir)
-
-        for dir in path_all_img:
-            for file in dir[2]:
-                path_img = Path(dir[0], file)
+        for root, dirs, files in os.walk(name_dir):
+            for file in files:
+                path_img = Path(root, file)
 
                 try:
-                    bot.send_photo(chat_id=chat_id, photo=open(path_img, 'rb'))
+                    with open(path_img, 'rb') as file:
+                        bot.send_photo(chat_id=chat_id, photo=file)
                     time.sleep(int(telegram_pause))
                 except telegram.error.BadRequest as error_text:
                     print(error_text, path_img)
