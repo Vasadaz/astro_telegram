@@ -37,7 +37,7 @@ def download_img_epic(token: str, count_img: int, dir_for_img: str):
 
     epic_img_info_list = response.json()
 
-    for epic_last_img_info in list(reversed(epic_img_info_list))[:count_img]:
+    for epic_last_img_info in epic_img_info_list[-count_img:]:
         epic_last_img_date_iso = datetime.fromisoformat(epic_last_img_info["date"])
         epic_last_img_date = datetime.strftime(epic_last_img_date_iso, "%Y/%m/%d")
         epic_last_img_name = epic_last_img_info["image"]
@@ -53,5 +53,5 @@ if __name__ == "__main__":
         load_dotenv(dotenv_path)
     nasa_token = os.environ["NASA_TOKEN"]
 
-    #download_img_apod(nasa_token, COUNT_IMG_NASA_APOD, DIR_IMG_NASA_APOD)
+    download_img_apod(nasa_token, COUNT_IMG_NASA_APOD, DIR_IMG_NASA_APOD)
     download_img_epic(nasa_token, COUNT_IMG_NASA_EPIC, DIR_IMG_NASA_EPIC)
