@@ -6,20 +6,19 @@ from downloader import download_img
 DIR_IMG_SPACEX = "images_spacex"
 
 
-def download_img_last_launch(dir_for_img: str):
+def download_last_launch_imgs(save_dir: str):
     response = requests.get("https://api.spacexdata.com/v4/launches/")
     response.raise_for_status()
-    all_launches = response.json()
+    launches = response.json()
 
-    for launch in all_launches[::-1]:
-        launch_img_links = launch["links"]["flickr"]["original"]
+    for launch in launches[::-1]:
+        img_urls = launch["links"]["flickr"]["original"]
 
-        if launch_img_links:
-            for link in launch_img_links:
-                download_img(link, dir_for_img)
-
+        if img_urls:
+            for url in img_urls:
+                download_img(url, save_dir)
             break
 
 
 if __name__ == "__main__":
-    download_img_last_launch(DIR_IMG_SPACEX)
+    download_last_launch_imgs(DIR_IMG_SPACEX)

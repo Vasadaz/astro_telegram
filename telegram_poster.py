@@ -6,23 +6,23 @@ import telegram
 from dotenv import load_dotenv
 
 
-def send_img_telegram(token: str, pause: int, chat_id: str, dirs_img_list: list):
+def send_img_telegram(token: str, pause: int, chat_id: str, img_dirs: list):
     bot = telegram.Bot(token)
 
-    for name_dir in dirs_img_list:
-        for root, dirs, files in os.walk(name_dir):
+    for dir in img_dirs:
+        for root, img_dirs, files in os.walk(dir):
             for file in files:
-                path_img = Path(root, file)
+                img_path = Path(root, file)
 
                 try:
-                    with open(path_img, 'rb') as img:
+                    with open(img_path, 'rb') as img:
                         bot.send_photo(chat_id=chat_id, photo=img)
                     time.sleep(pause)
                 except telegram.error.BadRequest as error_text:
-                    print(error_text, path_img)
+                    print(error_text, img_path)
 
-                os.remove(path_img)
-        os.rmdir(name_dir)
+                os.remove(img_path)
+        os.rmdir(dir)
 
 
 if __name__ == "__main__":
