@@ -31,13 +31,13 @@ if __name__ == "__main__":
         load_dotenv(dotenv_path)
     telegram_token = os.environ["TELEGRAM_TOKEN"]
     telegram_pause = int(os.getenv("TELEGRAM_PAUSE", default=86400))
-    chat_id = os.environ["TELEGRAM_CHAT"]
+    telegram_chat_id = os.environ["TELEGRAM_CHAT"]
 
     names_dirs = os.listdir()
-    img_dirs_list = []
+    img_dirs = []
 
     for name_dir in names_dirs:
         if "images" in name_dir:
-            img_dirs_list.append(name_dir)
+            img_dirs.append(name_dir)
 
-    send_img_telegram(telegram_token, telegram_pause, chat_id, img_dirs_list)
+    send_img_telegram(telegram_token, telegram_pause, telegram_chat_id, img_dirs)

@@ -21,11 +21,11 @@ if __name__ == "__main__":
         load_dotenv(dotenv_path)
     nasa_token = os.environ["NASA_TOKEN"]
     telegram_token = os.environ["TELEGRAM_TOKEN"]
-    pause = int(os.getenv("TELEGRAM_PAUSE", default=86400))
-    chat_id = os.environ["TELEGRAM_CHAT"]
+    telegram_pause = int(os.getenv("TELEGRAM_PAUSE", default=86400))
+    telegram_chat_id = os.environ["TELEGRAM_CHAT"]
 
     while True:
         spacex.download_last_launch_imgs(DIR_IMG_SPACEX)
         nasa.download_imgs_apod(nasa_token, COUNT_IMG_NASA_APOD, DIR_IMG_NASA_APOD)
         nasa.download_imgs_epic(nasa_token, COUNT_IMG_NASA_EPIC, DIR_IMG_NASA_EPIC)
-        telegram_poster.send_img_telegram(telegram_token, pause, chat_id, DIRS_IMG)
+        telegram_poster.send_img_telegram(telegram_token, telegram_pause, telegram_chat_id, DIRS_IMG)

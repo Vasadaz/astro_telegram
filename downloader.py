@@ -7,7 +7,7 @@ import requests
 
 def download_img(img_url: str, save_path: str):
     Path(save_path).mkdir(parents=True, exist_ok=True)
-    name_img = search_full_name_image(img_url)
+    img_name = search_full_name_image(img_url)
 
     response = requests.get(img_url)
     response.raise_for_status()
