@@ -12,7 +12,7 @@ def download_img(img_url: str, save_path: str):
     response = requests.get(img_url)
     response.raise_for_status()
 
-    with open(f"{save_path}/{name_img}", 'wb') as file:
+    with open(f"{save_path}/{img_name}", 'wb') as file:
         file.write(response.content)
 
 
